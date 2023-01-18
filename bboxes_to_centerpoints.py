@@ -141,9 +141,10 @@ def get_average_image_gsd(anns_path):
     gsd_vals = []
 
     for i in images:
-        gsd_val = i['acquisition_data']['GSD'][0]
-        if gsd_val != None:
-            gsd_vals.append(gsd_val)
+        if 'acquisition_data' in i.keys():
+            gsd_val = i['acquisition_data']['GSD'][0]
+            if gsd_val != None:
+                gsd_vals.append(gsd_val)
 
     avg_img_gsd = np.average(gsd_vals)
 
@@ -162,10 +163,11 @@ def get_im_gsd_from_id(im_id, gt_content):
 
     for i in images:
         if i['id'] == im_id:
-            gsd_val = i['acquisition_data']['GSD'][0]
-            return gsd_val
-    print(f'GSD Missing: Image {im_id}')
-    return None
+            try:
+                return ['acquisition_data']['GSD'][0]
+            except:
+                return None
+        
 
 def get_obj_size_from_id(cat_id, gt_content):
     '''
@@ -335,6 +337,7 @@ if __name__ == "__main__":
     # Adding optional argument
     parser.add_argument("-train_fp", "--train_fp", help = "File path to geococo train annotations")
     parser.add_argument("-val_fp", "--val_fp", help = "File path to geococo val annotations")
+    parser.add_argument("-avg_gsd", "--avg_gsd", help = "Average image GSD you would like to use", required = False)
     
     # Read arguments from command line
     args = parser.parse_args()
@@ -346,13 +349,21 @@ if __name__ == "__main__":
     train_c_cp = convert_anns_centerpoint(parser.train_fp)
     val_c_cp = convert_anns_centerpoint(parser.val_fp)
     
-    # get the average image gsd value
-    avg_img_gsd = get_average_image_gsd(train_c_cp)
+    if args.avg_gsd:
+        # convert bounding boxes to square boxes around centerpoints based on gsd and 
+        # average object size
+        train_anns_sq = average_bboxes_from_centerpoints(train_c_cp, avg_img_gsd = args.avg_gsd)
+        val_anns_sq = average_bboxes_from_centerpoints(val_c_cp, avg_img_gsd = args.avg_gsd)
+    else:
+        
+        # get the average image gsd value
+        avg_img_gsd = get_average_image_gsd(train_c_cp)
+        # convert bounding boxes to square boxes around centerpoints based on gsd and 
+        # average object size
+        train_anns_sq = average_bboxes_from_centerpoints(train_c_cp, avg_img_gsd = avg_img_gsd)
+        val_anns_sq = average_bboxes_from_centerpoints(val_c_cp, avg_img_gsd = avg_img_gsd)
     
-    # convert bounding boxes to square boxes around centerpoints based on gsd and 
-    # average object size
-    train_anns_sq = average_bboxes_from_centerpoints(train_c_cp, avg_img_gsd = avg_img_gsd)
-    val_anns_sq = average_bboxes_from_centerpoints(val_c_cp, avg_img_gsd = avg_img_gsd)
+    
     
     
     

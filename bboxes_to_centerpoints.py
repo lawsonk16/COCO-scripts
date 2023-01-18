@@ -41,7 +41,10 @@ def average_bboxes_from_centerpoints(anns_path, avg_img_gsd = None):
         if im_gsd != None:
             ob_h_w = int(obj_size/im_gsd)
         else:
-            ob_h_w = int(obj_size/avg_img_gsd)
+            try:
+                ob_h_w = int(obj_size/avg_img_gsd)
+            except:
+                print(f'object size is {obj_size} and the average gsd is {avg_img_gsd}')
         square_bbox = [x - (ob_h_w/2), y - (ob_h_w/2), ob_h_w, ob_h_w]
         new_a['bbox'] = square_bbox
         new_annotations.append(new_a)

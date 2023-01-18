@@ -94,7 +94,7 @@ def estimate_category_size(anns_path, write_out = False, matched_files = []):
         im_gsd = get_im_gsd_from_id(a['image_id'], content)
         if im_gsd != None:
           size_m = size*im_gsd
-        estimates[a['category_id']]['sizes'].append(size_m)
+          estimates[a['category_id']]['sizes'].append(size_m)
     
     # add average sizes using size lists
     for k,v in estimates.items():

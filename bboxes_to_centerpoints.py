@@ -89,7 +89,7 @@ def estimate_category_size(anns_path, write_out = False, matched_files = []):
         estimates[c['id']] = {'name': c['name'], 'sizes': []}
 
     # add the size of each indivdual object to the list for that category
-    for a in tqdm(anns):
+    for a in tqdm(anns, desc = "Estimating Category Sizes"):
         bbox = a['bbox']
 
         # get largest side of object
@@ -102,7 +102,6 @@ def estimate_category_size(anns_path, write_out = False, matched_files = []):
     # add average sizes using size lists
     for k,v in estimates.items():
         avg = np.mean(v['sizes'])
-        name = v['name']
         estimates[k]['average'] = avg
 
     new_cats = []
@@ -143,7 +142,7 @@ def get_average_image_gsd(anns_path):
 
     gsd_vals = []
 
-    for i in images:
+    for i in tqdm(images, desc = 'Finding Average Image GSD'):
         if 'acquisition_data' in i.keys():
             gsd_val = i['acquisition_data']['GSD'][0]
             if gsd_val != None:
@@ -347,6 +346,11 @@ if __name__ == "__main__":
     
     # add size estimates in meters to the object categories
     estimates = estimate_category_size(parser.train_fp, True, [parser.val_fp])
+    print('Estimated category sizes:')
+    for k in estimates.keys():
+          name = estimates[k]['name']
+          avg = round(estimates[k]['average'], 1)
+          print(f'{name}: {avg} meters')
     
     # add centerpoints to the annotations
     train_c_cp = convert_anns_centerpoint(parser.train_fp)

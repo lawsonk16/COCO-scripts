@@ -365,6 +365,7 @@ if __name__ == "__main__":
         
         # get the average image gsd value
         avg_img_gsd = get_average_image_gsd(train_c_cp)
+        print(f'Average Image GSD: {avg_img_gsd}')
         # convert bounding boxes to square boxes around centerpoints based on gsd and 
         # average object size
         train_anns_sq = average_bboxes_from_centerpoints(train_c_cp, avg_img_gsd = avg_img_gsd)

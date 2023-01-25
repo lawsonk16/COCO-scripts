@@ -166,7 +166,7 @@ def get_im_gsd_from_id(im_id, gt_content):
     for i in images:
         if i['id'] == im_id:
             try:
-                return ['acquisition_data']['GSD'][0]
+                return i['acquisition_data']['GSD'][0]
             except:
                 return None
         
@@ -345,7 +345,7 @@ if __name__ == "__main__":
     args = parser.parse_args()
     
     # add size estimates in meters to the object categories
-    estimates = estimate_category_size(parser.train_fp, True, [parser.val_fp])
+    estimates = estimate_category_size(args.train_fp, True, [args.val_fp])
     print('Estimated category sizes:')
     for k in estimates.keys():
           name = estimates[k]['name']
@@ -353,8 +353,8 @@ if __name__ == "__main__":
           print(f'{name}: {avg} meters')
     
     # add centerpoints to the annotations
-    train_c_cp = convert_anns_centerpoint(parser.train_fp)
-    val_c_cp = convert_anns_centerpoint(parser.val_fp)
+    train_c_cp = convert_anns_centerpoint(args.train_fp)
+    val_c_cp = convert_anns_centerpoint(args.val_fp)
     
     if args.avg_gsd:
         # convert bounding boxes to square boxes around centerpoints based on gsd and 

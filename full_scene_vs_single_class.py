@@ -91,6 +91,8 @@ def single_cat_dataset(cat_id, coco_gt_fp, image_fp, new_exp_dir = False):
   return new_gt_fp, new_image_fp
 
 def main(cat_id, ann_fp, img_fp):
+    
+
 
   print('Generating Single Class Dataset')
   anns_1c, ims_1c = single_cat_dataset(cat_id, ann_fp, img_fp)
@@ -165,4 +167,4 @@ if __name__ == "__main__":
     # Read arguments from command line
     args = parser.parse_args()
     
-    main(cat_id = args.cat_id, ann_fp = args.ann_fp, img_fp = args.img_fp)
+    main(cat_id = int(args.cat_id), ann_fp = args.ann_fp, img_fp = args.img_fp)

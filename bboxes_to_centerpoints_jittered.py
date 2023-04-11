@@ -55,7 +55,7 @@ def average_bboxes_from_centerpoints(anns_path, avg_img_gsd = None):
     new_annotations = []
     for a in tqdm(anns, desc = 'Creating Square Bboxes'):
         new_a = a.copy()
-        [x,y] = a['centerpoint']
+        [x,y] = a['object_center']
         obj_size = get_obj_size_from_id(a['category_id'], content)
         im_gsd = get_im_gsd_from_id(a['image_id'], content)
         if im_gsd != None:
@@ -341,7 +341,7 @@ def convert_anns_centerpoint_meters(anns_path, avg_img_gsd, shift_meters = 5, pe
             if y_c < 0:
                y_c = 0
 
-            new_a['centerpoint'] = [x_c, y_c]
+            new_a['object_center'] = [x_c, y_c]
             new_anns.append(new_a)
             
     for i in images_regular:
@@ -352,7 +352,7 @@ def convert_anns_centerpoint_meters(anns_path, avg_img_gsd, shift_meters = 5, pe
             x1, y1, w, h = a['bbox']
             x_c = x1 + int(w/2)
             y_c = y1 + int(h/2)
-            new_a['centerpoint'] = [x_c, y_c]
+            new_a['object_center'] = [x_c, y_c]
             new_anns.append(new_a)
 
     ann_contents['annotations'] = new_anns

@@ -158,11 +158,11 @@ if __name__ == "__main__":
     # Initialize parser
     parser = argparse.ArgumentParser()
     # Adding optional argument
-    parser.add_argument("-category_id", "--category_id", help = "int, COCO category id of the class you would like to focus on for this experiment")
+    parser.add_argument("-cat_id", "--cat_id", help = "int, COCO category id of the class you would like to focus on for this experiment")
     parser.add_argument("-ann_fp", "--ann_fp", help = "str, File path to coco annotations")
     parser.add_argument("-img_fp", "--img_fp", help = "str, File path to images for the annotations", required = False)
     
     # Read arguments from command line
     args = parser.parse_args()
     
-    main(cat_id = args.category_id, ann_fp = args.ann_fp, img_fp = args.img_fp)
+    main(cat_id = args.cat_id, ann_fp = args.ann_fp, img_fp = args.img_fp)
